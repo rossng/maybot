@@ -1,40 +1,77 @@
-import Html exposing (Html, button, div, text)
+import Html exposing (..)
 import Html.Events exposing (onClick)
-
+import Html.Attributes
+import Collage exposing (..)
+import Element exposing (..)
+import Color exposing (..)
+import Css exposing (padding, px)
 
 main =
-  Html.beginnerProgram { model = model, view = view, update = update }
+  Html.program
+    { init = init
+    , view = view
+    , update = update
+    , subscriptions = subscriptions
+    }
 
+
+segmentDim = 15
+(width, height) = (600, 600)
 
 -- MODEL
 
-type alias Model = Int
+type alias Position = (Int, Int)
 
-model : Model
-model =
-  0
+type Direction
+  = Up
+  | Down
+  | Left
+  | Right
+
+type alias Snake =
+  { head: Position
+  , tail: List Position
+  , direction: Direction }
+
+type alias Model = Snake
+
+init : ( Model, Cmd Msg )
+init =
+  ( Snake (0, 0) [] Right, Cmd.none )
 
 
 -- UPDATE
 
-type Msg = Increment | Decrement
+type alias Msg = Direction
 
-update : Msg -> Model -> Model
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-  case msg of
-    Increment ->
-      model + 1
+  ( model, Cmd.none )
 
-    Decrement ->
-      model - 1
+-- SUBSCRIPTIONS
+
+subscriptions : Model -> Sub Msg
+subscriptions model = Sub.none
 
 
 -- VIEW
 
+styles =
+    Css.asPairs >> Html.Attributes.style
+
+snake : Snake -> Element
+snake s = (collage 300 300
+            [ square 10 |> outlined (solid black)
+            , segment (-150, -150) (-150, 150) |> traced (solid black)
+            , segment (-150, -150) (150, -150) |> traced (solid black)
+            , segment (150, -150) (150, 150) |> traced (solid black)
+            , segment (-150, 150) (150, 150) |> traced (solid black)
+            ]
+          )
+
+
 view : Model -> Html Msg
 view model =
-  div []
-    [ button [ onClick Decrement ] [ text "-" ]
-    , div [] [ text (toString model) ]
-    , button [ onClick Increment ] [ text "+" ]
-    ]
+  div
+    [ styles [ padding (px 10) ] ]
+    [ (snake model) |> Element.toHtml ]
