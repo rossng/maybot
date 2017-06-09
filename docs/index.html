@@ -17094,18 +17094,29 @@ var _user$project$Main$view = function (model) {
 					{ctor: '[]'},
 					{
 						ctor: '::',
-						_0: _elm_lang$html$Html$text(
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								'Score: ',
-								_elm_lang$core$Basics$toString(model.score))),
+						_0: _elm_lang$html$Html$text('WASD. Consume the orphans.'),
 						_1: {ctor: '[]'}
 					}),
 				_1: {
 					ctor: '::',
-					_0: _evancz$elm_graphics$Element$toHtml(
-						_user$project$Main$renderGame(model)),
-					_1: {ctor: '[]'}
+					_0: A2(
+						_elm_lang$html$Html$p,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(
+								A2(
+									_elm_lang$core$Basics_ops['++'],
+									'Score: ',
+									_elm_lang$core$Basics$toString(model.score))),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: _evancz$elm_graphics$Element$toHtml(
+							_user$project$Main$renderGame(model)),
+						_1: {ctor: '[]'}
+					}
 				}
 			}
 		});

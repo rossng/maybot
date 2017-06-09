@@ -136,5 +136,6 @@ view model =
   div
     [ styles [ padding (px 10) ] ]
     [ h1 [ styles [ Css.fontFamilies ["Impact"] ] ] [Html.text "Naughty Theresa"]
+    , p [] [Html.text "WASD. Consume the orphans."]
     , p [] [Html.text ("Score: " ++ toString model.score)]
     , (renderGame model) |> Element.toHtml ]
