@@ -75,7 +75,10 @@ tickModel model =
         Nothing ->
           Just (Tuple.first (Random.step (Random.int 0 19) (initialSeed model.time) ), Tuple.first (Random.step  (Random.int 0 19) (initialSeed (model.time*2))))
         Just orphan -> if model.snake.head == orphan then Nothing else Just orphan
-  in { model | snake = newSnake, orphan = newOrphan, time = model.time + 1 }
+      newScore = case model.orphan of
+        Nothing -> model.score
+        Just orphan -> if model.snake.head == orphan then model.score + 1 else model.score
+  in { model | snake = newSnake, orphan = newOrphan, time = model.time + 1, score = newScore }
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
@@ -133,5 +136,5 @@ view model =
   div
     [ styles [ padding (px 10) ] ]
     [ h1 [ styles [ Css.fontFamilies ["Impact"] ] ] [Html.text "Naughty Theresa"]
-    , p [] [Html.text (toString model.score)]
+    , p [] [Html.text ("Score: " ++ toString model.score)]
     , (renderGame model) |> Element.toHtml ]
