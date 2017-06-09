@@ -119,11 +119,11 @@ gridToPx pos =
 
 renderGame : Game -> Element
 renderGame game = (collage width height
-            [ fittedImage width height "http://localhost:8000/wheat.jpg" |> toForm
+            [ fittedImage width height "wheat.jpg" |> toForm
             , case game.orphan of
-                Just orphan -> image (round (segmentDim * 1.2)) (round (segmentDim * 1.2)) "http://localhost:8000/orphan.png" |> toForm |> move (gridToPx orphan)
+                Just orphan -> image (round (segmentDim * 1.2)) (round (segmentDim * 1.2)) "orphan.png" |> toForm |> move (gridToPx orphan)
                 Nothing     -> square 0 |> filled black
-            , image (round (segmentDim * 1.5)) (round (segmentDim * 1.5)) "http://localhost:8000/scary.png" |> toForm |> move (gridToPx game.snake.head)
+            , image (round (segmentDim * 1.5)) (round (segmentDim * 1.5)) "scary.png" |> toForm |> move (gridToPx game.snake.head)
             , segment (-width/2, -height/2) (-width/2, height/2) |> traced (solid black)
             , segment (-width/2, -height/2) (width/2, -height/2) |> traced (solid black)
             , segment (width/2, -height/2) (width/2, height/2) |> traced (solid black)
