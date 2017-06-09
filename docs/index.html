@@ -17115,7 +17115,41 @@ var _user$project$Main$view = function (model) {
 						ctor: '::',
 						_0: _evancz$elm_graphics$Element$toHtml(
 							_user$project$Main$renderGame(model)),
-						_1: {ctor: '[]'}
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$audio,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$controls(true),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$loop(true),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$autoplay(true),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$hidden(true),
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								},
+								{
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$source,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$src('kirby.mp3'),
+											_1: {ctor: '[]'}
+										},
+										{ctor: '[]'}),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}
 					}
 				}
 			}
@@ -17199,7 +17233,7 @@ var _user$project$Main$subscriptions = function (model) {
 			_0: _elm_lang$keyboard$Keyboard$downs(_user$project$Main$KeyMsg),
 			_1: {
 				ctor: '::',
-				_0: A2(_elm_lang$core$Time$every, 0.5 * _elm_lang$core$Time$second, _user$project$Main$Tick),
+				_0: A2(_elm_lang$core$Time$every, 0.2 * _elm_lang$core$Time$second, _user$project$Main$Tick),
 				_1: {ctor: '[]'}
 			}
 		});
