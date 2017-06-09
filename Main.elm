@@ -1,6 +1,6 @@
 import Html exposing (..)
 import Html.Events exposing (onClick)
-import Html.Attributes
+import Html.Attributes exposing (controls, loop, src, autoplay, hidden)
 import Collage exposing (..)
 import Element exposing (..)
 import Color exposing (..)
@@ -103,7 +103,7 @@ update msg model =
 subscriptions : Model -> Sub Msg
 subscriptions model =
   Sub.batch [ Keyboard.downs KeyMsg
-            , Time.every (0.5 * second) Tick]
+            , Time.every (0.2 * second) Tick]
 
 
 -- VIEW
@@ -138,4 +138,5 @@ view model =
     [ h1 [ styles [ Css.fontFamilies ["Impact"] ] ] [Html.text "Naughty Theresa"]
     , p [] [Html.text "WASD. Consume the orphans."]
     , p [] [Html.text ("Score: " ++ toString model.score)]
-    , (renderGame model) |> Element.toHtml ]
+    , (renderGame model) |> Element.toHtml
+    , audio [(controls True), (loop True), (autoplay True), (hidden True)] [source [ src "kirby.mp3" ] []] ]
