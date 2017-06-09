@@ -103,7 +103,7 @@ update msg model =
 subscriptions : Model -> Sub Msg
 subscriptions model =
   Sub.batch [ Keyboard.downs KeyMsg
-            , Time.every second Tick]
+            , Time.every (0.5 * second) Tick]
 
 
 -- VIEW
