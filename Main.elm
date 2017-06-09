@@ -4,7 +4,11 @@ import Html.Attributes
 import Collage exposing (..)
 import Element exposing (..)
 import Color exposing (..)
+import Keyboard exposing (..)
+import Time exposing (..)
 import Css exposing (padding, px)
+import Char exposing (fromCode)
+import Debug
 
 main =
   Html.program
@@ -15,7 +19,7 @@ main =
     }
 
 
-segmentDim = 15
+segmentDim = 30
 (width, height) = (600, 600)
 
 -- MODEL
@@ -42,16 +46,39 @@ init =
 
 -- UPDATE
 
-type alias Msg = Direction
+--type alias Msg = Direction
+type Msg = KeyMsg Keyboard.KeyCode
+         | Tick Time
+
+tickModel : Model -> Model
+tickModel model =
+  case model.direction of
+    Up -> {model | head = (Tuple.first model.head, (Tuple.second model.head + 1) % 20)}
+    Down -> {model | head = (Tuple.first model.head, (Tuple.second model.head - 1) % 20)}
+    Left -> {model | head = ((Tuple.first model.head - 1) % 20, Tuple.second model.head)}
+    Right -> {model | head = ((Tuple.first model.head + 1) % 20, Tuple.second model.head )}
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-  ( model, Cmd.none )
+  case msg of
+    KeyMsg code ->
+      -- let l = Debug.log "Key " (fromCode code)
+      -- in (model, Cmd.none)
+      case fromCode code of
+        'W' -> ({model | direction = Up}, Cmd.none)
+        'A' -> ({model | direction = Left}, Cmd.none)
+        'S' -> ({model | direction = Down}, Cmd.none)
+        'D' -> ({model | direction = Right}, Cmd.none)
+        _  -> (model, Cmd.none)
+    Tick newTime ->
+      (tickModel model, Cmd.none)
 
 -- SUBSCRIPTIONS
 
 subscriptions : Model -> Sub Msg
-subscriptions model = Sub.none
+subscriptions model =
+  Sub.batch [ Keyboard.downs KeyMsg
+            , Time.every second Tick]
 
 
 -- VIEW
@@ -59,13 +86,20 @@ subscriptions model = Sub.none
 styles =
     Css.asPairs >> Html.Attributes.style
 
+gridToPx : Snake -> (Float, Float)
+gridToPx s =
+  let px1  = toFloat (Tuple.first s.head * segmentDim) - (width/2)
+      px2  = toFloat (Tuple.second s.head * segmentDim) - (height/2)
+  in ( px1 + (segmentDim / 2), px2 + (segmentDim/2))
+
 snake : Snake -> Element
-snake s = (collage 300 300
-            [ square 10 |> outlined (solid black)
-            , segment (-150, -150) (-150, 150) |> traced (solid black)
-            , segment (-150, -150) (150, -150) |> traced (solid black)
-            , segment (150, -150) (150, 150) |> traced (solid black)
-            , segment (-150, 150) (150, 150) |> traced (solid black)
+snake s = (collage width height
+            [ fittedImage width height "http://localhost:8000/wheat.jpg" |> toForm
+            , image (round (segmentDim * 1.5)) (round (segmentDim * 1.5)) "http://localhost:8000/scary.png" |> toForm |> move (gridToPx s)
+            , segment (-width/2, -height/2) (-width/2, height/2) |> traced (solid black)
+            , segment (-width/2, -height/2) (width/2, -height/2) |> traced (solid black)
+            , segment (width/2, -height/2) (width/2, height/2) |> traced (solid black)
+            , segment (-width/2, height/2) (width/2, height/2) |> traced (solid black)
             ]
           )
 
